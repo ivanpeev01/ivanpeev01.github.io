@@ -1,0 +1,12 @@
+http://localhost:8000
+
+python -m http.server
+
+
+cd "D:\repos\24-25\Project_model - Ivan_Peev"
+
+PS D:\repos\24-25\Project_model - Ivan_Peev> Set-ExecutionPolicy Bypass -Scope Process -Force
+PS D:\repos\24-25\Project_model - Ivan_Peev>  .\venv\Scripts\Activate
+(venv) PS D:\repos\24-25\Project_model - Ivan_Peev> python app.py
+
+python start_servers.py

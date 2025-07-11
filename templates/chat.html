@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teachable Machine Image Model and Chat</title>
+    <link rel="stylesheet" href="static/chat.css">
+</head>
+<body>
+   
+    <!-- Чат интерфейс -->
+    <div class="chat-container" id="chatContainer">
+        <div class="chat-header">Чат с Пролог</div>
+        <div class="chat-body" id="chatBody"></div>
+        <div class="chat-footer">
+            <input type="text" id="chatInput" placeholder="Въведи съобщение..." />
+            <button id="sendButton">Изпрати</button>
+        </div>
+    </div>
+
+<script>
+        document.getElementById('sendButton').addEventListener('click', sendMessage);
+        document.getElementById('chatInput').addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            appendMessage('Вие', message);
+
+            fetch('/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                appendMessage('Пролог', data.response);
+            })
+            .catch(err => {
+                console.error(err);
+                appendMessage('Пролог', 'Грешка при свързване със сървъра.');
+            });
+
+            input.value = '';
+        }
+
+        function appendMessage(sender, text) {
+            const chatBody = document.getElementById('chatBody');
+            const messageDiv = document.createElement('div');
+            messageDiv.innerHTML = `<strong>${sender}:</strong> ${text}`;
+            chatBody.appendChild(messageDiv);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+    </script>
+</body>
+</html>
